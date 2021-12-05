@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class FeatureRestController {
 	
 	private FeatureService featureService;
 	
-	@Autowired ModelMapper modelMapper;
+	private ModelMapper modelMapper =  new ModelMapper();
 	
 	@Autowired
 	public FeatureRestController(FeatureService featureService) {

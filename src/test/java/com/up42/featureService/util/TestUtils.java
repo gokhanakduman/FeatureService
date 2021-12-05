@@ -1,7 +1,10 @@
 package com.up42.featureService.util;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import com.up42.featureService.controller.dto.FeatureResponseDTO;
 import com.up42.featureService.repository.model.FeatureModel;
@@ -30,5 +33,27 @@ public class TestUtils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static final boolean validateFeatureModelLists(List<FeatureModel> first, List<FeatureModel> second) {
+		if (first.size() == second.size()) {
+			List<FeatureModel> firstSorted = first.stream().sorted((lhs, rhs) -> lhs.getId().compareTo(rhs.getId())).collect(Collectors.toList());
+			List<FeatureModel> secondSorted = second.stream().sorted((lhs, rhs) -> lhs.getId().compareTo(rhs.getId())).collect(Collectors.toList());
+			for(int i = 0; i < firstSorted.size() ;i++) {
+				boolean isValid = CompareToBuilder.reflectionCompare(firstSorted.get(i), secondSorted.get(i)) == 0;
+				if (isValid == false) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public static final Timestamp getRandomTimestamp() {
+		long offset = Timestamp.valueOf("2021-12-05 00:00:00").getTime();
+		long end = Timestamp.valueOf("2021-01-01 00:00:00").getTime();
+		long diff = end - offset + 1;
+		return new Timestamp(offset + (long)(Math.random() * diff));
 	}
 }

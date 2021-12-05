@@ -1,4 +1,4 @@
-package com.up42.featureService.unit.controller;
+package com.up42.featureService.integration.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,11 +11,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,36 +25,20 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.up42.featureService.controller.dto.FeatureResponseDTO;
-import com.up42.featureService.exception.ImageValidationException;
 import com.up42.featureService.repository.model.FeatureModel;
-import com.up42.featureService.service.FeatureService;
-import com.up42.featureService.util.MockBeanProvider;
 import com.up42.featureService.util.TestConstants;
 import com.up42.featureService.util.TestUtils;
 
+
+@SpringBootTest
 @ActiveProfiles("test")
-@ContextConfiguration(classes= {FeatureRestControllerUnitTest.MockConfiguration.class})
-@WebMvcTest
-@ComponentScan(basePackages = "com.trendyol.linkConverter.controller")
-
-public class FeatureRestControllerUnitTest {
-
+@AutoConfigureMockMvc
+public class FeatureRestControllerIntegrationTest {
 	@Autowired
 	MockMvc mvc;
 	
-	
-	@TestConfiguration
-	public static class MockConfiguration {
-		@Primary
-		@Bean
-		FeatureService mockFeatureService() throws ImageValidationException {
-			return MockBeanProvider.mockFeatureService();
-		}
-	}
-	
-	
 	@Test
-	public void whenGetAllFeatures_thenCorrectResponse() throws Exception {
+	public void givenFlywayPopulatedDb_whenGetAllFeatures_thenCorrectResponse() throws Exception {
 		MvcResult mvcResult = mvc.perform(get("/v1/features"))
                 .andExpect(status().isOk())
                 // Instead of these expect statements, I preferred to thoroughly compare actual models and returned DTOs'
@@ -67,13 +51,13 @@ public class FeatureRestControllerUnitTest {
     		= new TypeReference<List< FeatureResponseDTO>>() {};
 		
     	List<FeatureResponseDTO> responseDTOs = mapper.readValue(mvcResult.getResponse().getContentAsString(), typeRef);
-		List<FeatureModel> featureModelList = TestConstants.sampleFeatureModelList;
+		List<FeatureModel> featureModelList = TestConstants.featureModelsProvidedByFlyway;
 		assertTrue(TestUtils.validateFeatureModelListAndFeatureResponseDTOList(featureModelList, responseDTOs));
 	}
 	
 	@Test
-	public void whenGetFeatureByIdWithExistingFeatureIdWithQuicklook_thenCorrectResponse() throws Exception {
-		FeatureModel featureModelToTest = TestConstants.sampleFeatureModelWithQuicklook;
+	public void givenFlywayPopulatedDb_whenGetFeatureByIdWithExistingFeatureIdWithQuicklook_thenCorrectResponse() throws Exception {
+		FeatureModel featureModelToTest = TestConstants.flywayPopulatedFeatureModelWithQuicklook;
 		MvcResult mvcResult = mvc.perform(get("/v1/features/{id}", featureModelToTest.getId().toString()))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -84,8 +68,8 @@ public class FeatureRestControllerUnitTest {
 	}
 	
 	@Test
-	public void whenGetFeatureByIdWithExistingFeatureIdWithoutQuicklook_thenCorrectResponse() throws Exception {
-		FeatureModel featureModelToTest = TestConstants.sampleFeatureModelWithoutQuicklook;
+	public void givenFlywayPopulatedDb_whenGetFeatureByIdWithExistingFeatureIdWithoutQuicklook_thenCorrectResponse() throws Exception {
+		FeatureModel featureModelToTest = TestConstants.flywayPopulatedFeatureModelWithoutQuicklook;
 		MvcResult mvcResult = mvc.perform(get("/v1/features/{id}", featureModelToTest.getId().toString()))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -96,19 +80,19 @@ public class FeatureRestControllerUnitTest {
 	}
 	
 	@Test()
-	public void whenGetFeatureByIdWithInvalidId_thenHttpStatusBadRequest() throws Exception {
+	public void givenFlywayPopulatedDb_whenGetFeatureByIdWithInvalidId_thenHttpStatusBadRequest() throws Exception {
 		mvc.perform(get("/v1/features/{id}", "qwe123"))
                 .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
 	}
 	
 	@Test()
-	public void whenGetFeatureByIdWithNonExistingId_thenHttpStatusNotFound() throws Exception {
+	public void givenFlywayPopulatedDb_whenGetFeatureByIdWithNonExistingId_thenHttpStatusNotFound() throws Exception {
 		mvc.perform(get("/v1/features/{id}", "b6ace629-38ee-4c45-bb99-552302e19545"))
         .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
 
-	public void whenGetFeatureQuicklookByIdWithExistingFeatureIdWithQuicklook_thenCorrectResponse() throws Exception {
-		FeatureModel featureModelToTest = TestConstants.sampleFeatureModelWithQuicklook;
+	public void givenFlywayPopulatedDb_whenGetFeatureQuicklookByIdWithExistingFeatureIdWithQuicklook_thenCorrectResponse() throws Exception {
+		FeatureModel featureModelToTest = TestConstants.flywayPopulatedFeatureModelWithQuicklook;
 		MvcResult mvcResult = mvc.perform(get("/v1/features/{id}/quicklook", featureModelToTest.getId().toString()))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -119,23 +103,23 @@ public class FeatureRestControllerUnitTest {
 	}
 	
 	@Test
-	public void whenGetFeatureQuicklookByIdWithExistingFeatureIdWithoutQuicklook_thenNullResponse() throws Exception {
-		FeatureModel featureModelToTest = TestConstants.sampleFeatureModelWithoutQuicklook;
+	public void givenFlywayPopulatedDb_whenGetFeatureQuicklookByIdWithExistingFeatureIdWithoutQuicklook_thenNullResponse() throws Exception {
+		FeatureModel featureModelToTest = TestConstants.flywayPopulatedFeatureModelWithoutQuicklook;
 		mvc.perform(get("/v1/features/{id}/quicklook", featureModelToTest.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
 	}
 	
 	@Test()
-	public void whenGetFeatureQuicklookByIdWithInvalidId_thenHttpStatusNotFound() throws Exception {
-		mvc.perform(get("/v1/features/{id}/quicklook", "qwe123"))
-        .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));		
-	}
-	
-	
-	@Test()
-	public void whenGetFeatureQuicklookByIdWithNonExistingId_thenHttpStatusBadRequest() throws Exception {
-		mvc.perform(get("/v1/features/{id}/quicklook", "b623d629-38ee-4c45-bb99-552302e19545"))
+	public void givenFlywayPopulatedDb_whenGetFeatureQuicklookByIdWithInvalidId_thenHttpStatusNotFound() throws Exception {
+		mvc.perform(get("/v1/features/{id}/quicklook", "b6ace629-38ee-4c45-bb99-552302e19545"))
         .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
 	}
+	
+	@Test()
+	public void givenFlywayPopulatedDb_whenGetFeatureQuicklookByIdWithNonExistingId_thenHttpStatusBadRequest() throws Exception {
+		mvc.perform(get("/v1/features/{id}/quicklook", "qwe123"))
+        .andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+	
 }

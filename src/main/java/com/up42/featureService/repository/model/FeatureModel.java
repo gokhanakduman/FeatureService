@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.up42.featureService.util.TestConstants;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
