@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+
+  feature-db-service:
+    image: library/postgres:12.3-alpine
+    container_name: feature-db-service
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+
+  feature-service:
+    #build: .
+    image: up42/feature-service:latest
+    container_name: featureService
+    restart: always
+    environment:
+      MAINDB_ENDPOINT: feature-db-service
+      MAINDB_DBNAME: postgres
+      MAINDB_USERNAME: postgres
+      MAINDB_PASSWORD: password
+      spring.profiles.active: sandbox
+    ports:
+      - 8080:8080
+    depends_on:
+      - feature-db-service
+
+ 
