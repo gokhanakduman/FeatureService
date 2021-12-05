@@ -65,11 +65,12 @@ CREATE TABLE IF NOT EXISTS features
     quicklook TEXT
 );
 ```
+
 Migration script for creating table can be found [here](./src/main/resources/db/migration)  
 Also Java Based Migration is used for migrating static data into Database while ensuring that operation is only made once.  
 That migration can be found [here](./src/main/java/com/up42/featureService/repository/migration)  
 
-## Repository
+## Repository
 [FeatureRepository](./src/main/java/com/up42/featureService/repository/FeatureRepository.java) is the repository interface that extends [FeatureModel](./src/main/java/com/up42/featureService/repository/model/FeatureModel.java) entity.
 
 ## Controllers
