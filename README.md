@@ -42,7 +42,7 @@ After running the application, swagger can be used to access the endpoints of th
 ###### Actuator
 Actuator endpoints:  
 > http://localhost:8080/actuator  
-http://localhost:8080/actuator/metrics
+http://localhost:8080/actuator/metrics  
 http://localhost:8080/actuator/env
 
 ###### Postman
