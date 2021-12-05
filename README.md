@@ -35,17 +35,17 @@ And the app is stopped with:
 docker-compose down
 ```
 
-######Swagger
+###### Swagger
 After running the application, swagger can be used to access the endpoints of the service and their definitions  
 > http://localhost:8080/swagger-ui.html
 
-######Actuator
+###### Actuator
 Actuator endpoints:  
 > http://localhost:8080/actuator  
 http://localhost:8080/actuator/metrics
 http://localhost:8080/actuator/env
 
-######Postman
+###### Postman
 Postman collection including all endpoints can be found [here](./postman)
 
 # Implementation
