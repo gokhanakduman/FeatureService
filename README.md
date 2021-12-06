@@ -35,17 +35,29 @@ And the app is stopped with:
 docker-compose down
 ```
 
-###### Swagger
+# Required Parameters for running
+There are 4 required parameters:
+
+```
+-DMAINDB_ENDPOINT="host:port"
+-DMAINDB_PASSWORD="password"
+-DMAINDB_DBNAME="db_name"
+-DMAINDB_USERNAME="username"
+```
+
+This approach provides the ability to inject those parameters from from a vault or AWS Secrets Manager with the help of a CI/CD tool, instead of managing environment based application.properties files.  
+
+# Swagger
 After running the application, swagger can be used to access the endpoints of the service and their definitions  
 > http://localhost:8080/swagger-ui/index.html
 
-###### Actuator
+# Actuator
 Actuator endpoints:  
 > http://localhost:8080/actuator  
 http://localhost:8080/actuator/metrics  
 http://localhost:8080/actuator/env
 
-###### Postman
+# Postman
 Postman collection including all endpoints can be found [here](./postman)
 
 # Implementation
