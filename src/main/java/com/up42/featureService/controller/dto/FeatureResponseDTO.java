@@ -2,8 +2,7 @@ package com.up42.featureService.controller.dto;
 
 import java.util.UUID;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +12,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@ApiModel(value = "Convert Link Response Object", description = "Model")
+@Schema(title = "Convert Link Response Object", description = "FeatureResponseDTO")
 public class FeatureResponseDTO {
-	@ApiModelProperty(value = "Feature id")
+	@Schema(description = "Feature id")
 	UUID id;
-	@ApiModelProperty(value = "Timestamp")
+	@Schema(description = "Timestamp")
 	Long timestamp;
-	@ApiModelProperty(value = "Begin Viewing Date")
+	@Schema(description = "Begin Viewing Date")
 	Long beginViewingDate;
-	@ApiModelProperty(value = "End Viewing Date")
+	@Schema(description = "End Viewing Date")
 	Long endViewingDate;
-	@ApiModelProperty(value = "Mission name")
+	@Schema(description = "Mission name")
 	String missionName;
 }

@@ -37,7 +37,7 @@ docker-compose down
 
 ###### Swagger
 After running the application, swagger can be used to access the endpoints of the service and their definitions  
-> http://localhost:8080/swagger-ui.html
+> http://localhost:8080/swagger-ui/index.html
 
 ###### Actuator
 Actuator endpoints:  
