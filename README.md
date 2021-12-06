@@ -36,6 +36,8 @@ docker-compose down
 ```
 
 # Required Parameters for running
+> If you are running locally using docker-compose up, you don't need to set these parameters
+
 There are 4 required parameters:
 
 ```
